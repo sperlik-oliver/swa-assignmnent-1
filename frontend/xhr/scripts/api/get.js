@@ -5,40 +5,40 @@ function loadWeatherData(city, callback) {
   xhr.onload = () => {
     if (this.status == 200) {
       const data = JSON.parse(this.responseText);
-      const weatherData = data.map((item) => {
-        switch (item.type) {
+      const weatherData = data.map(({ time, place, value, unit, direction, precipitation_type, type }) => {
+        switch (type) {
           case 'temperature':
             return createTemperature(
-              item.time,
-              item.place,
-              item.value,
-              item.unit
+              time,
+              place,
+              value,
+              unit
             );
           case 'wind speed':
             return createWind(
-              item.time,
-              item.place,
-              item.value,
-              item.unit,
-              item.direction
+              time,
+              place,
+              value,
+              unit,
+              direction
             );
           case 'precipitation':
             return createPrecipitation(
-              item.time,
-              item.place,
-              item.value,
-              item.unit,
-              item.precipitation_type
+              time,
+              place,
+              value,
+              unit,
+              precipitation_type
             );
           case 'cloud coverage':
             return createCloudCoverage(
-              item.time,
-              item.place,
-              item.value,
-              item.unit
+              time,
+              place,
+              value,
+              unit
             );
           default:
-            throw new Error(`Unknown weather type: ${item.type}`);
+            throw new Error(`Unknown weather type: ${type}`)
         }
       });
       callback(weatherData);
@@ -58,44 +58,44 @@ function loadForecastData(city, callback) {
   xhr.onload = () => {
     if (this.status == 200) {
       const data = JSON.parse(this.responseText);
-      const forecastData = data.map((item) => {
-        switch (item.type) {
+      const forecastData = data.map(({ type, time, place, from, to, unit, precipitation_types, directions }) => {
+        switch (type) {
           case 'temperature':
             return createTemperaturePrediction(
-              item.time,
-              item.place,
-              item.from,
-              item.to,
-              item.unit
+              time,
+              place,
+              from,
+              to,
+              unit
             );
           case 'precipitation':
             return createPrecipitationPrediction(
-              item.time,
-              item.place,
-              item.from,
-              item.to,
-              item.precipitation_types,
-              item.unit
+              time,
+              place,
+              from,
+              to,
+              precipitation_types,
+              unit
             );
           case 'wind speed':
             return createWindPrediction(
-              item.time,
-              item.place,
-              item.from,
-              item.to,
-              item.directions,
-              item.unit
+              time,
+              place,
+              from,
+              to,
+              directions,
+              unit
             );
           case 'cloud coverage':
             return createCloudCoveragePrediction(
-              item.time,
-              item.place,
-              item.from,
-              item.to,
-              item.unit
+              time,
+              place,
+              from,
+              to,
+              unit
             );
           default:
-            throw new Error(`Unknown forecast type: ${item.type}`);
+            console.error(`Unknown forecast type: ${type}`)
         }
       });
       callback(forecastData);
