@@ -2,8 +2,7 @@ function loadWeatherData(city, callback) {
   try {
   const xhr = new XMLHttpRequest();
   xhr.open('GET', `${BASE_URL}/data/${city}`, true);
-  xhr.onload = () => {
-    if (this.status == 200) {
+  xhr.onload = function() {
       const data = JSON.parse(this.responseText);
       const weatherData = data.map(({ time, place, value, unit, direction, precipitation_type, type }) => {
         switch (type) {
@@ -42,7 +41,6 @@ function loadWeatherData(city, callback) {
         }
       });
       callback(weatherData);
-    }
   };
   xhr.send();
 } catch (e) {
@@ -55,7 +53,7 @@ function loadForecastData(city, callback) {
   try {
   const xhr = new XMLHttpRequest();
   xhr.open('GET', `${BASE_URL}/forecast/${city}`, true);
-  xhr.onload = () => {
+  xhr.onload = function () {
     if (this.status == 200) {
       const data = JSON.parse(this.responseText);
       const forecastData = data.map(({ type, time, place, from, to, unit, precipitation_types, directions }) => {
